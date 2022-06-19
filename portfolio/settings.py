@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'main.apps.MainConfig',
+    'static_precompiler'
 ]
 
 MIDDLEWARE = [
@@ -120,8 +121,29 @@ USE_TZ = True
 
 # Static files (CSS, JavaScript, Images)
 # https://docs.djangoproject.com/en/4.0/howto/static-files/
+STATICFILES_FINDERS = (
+    'django.contrib.staticfiles.finders.FileSystemFinder',
+    'django.contrib.staticfiles.finders.AppDirectoriesFinder',
+    # other finders..
+    'static_precompiler.finders.StaticPrecompilerFinder',
+)
+
+STATIC_PRECOMPILER_COMPILERS = (
+    ('static_precompiler.compilers.libsass.SCSS', {
+        "sourcemap_enabled": True,
+        "load_paths": ["/path"],
+        "precision": 8,
+    }),
+    ('static_precompiler.compilers.libsass.SASS', {
+        "sourcemap_enabled": True,
+        "load_paths": ["/path"],
+        "precision": 8,
+        "output_style": "compressed",
+    }),
+)
 
 STATIC_URL = 'static/'
+STATIC_ROOT = 'main/static'
 
 # Default primary key field type
 # https://docs.djangoproject.com/en/4.0/ref/settings/#default-auto-field
